@@ -1,4 +1,4 @@
-# 2023_paper_Melcher_Halkj-r
+# 2023_paper_Melcher_Halkjaer
 The code for generating the plots that are in the paper at currently overleaf:
 https://www.overleaf.com/4421122739jpjwkwjwfsyk
 
