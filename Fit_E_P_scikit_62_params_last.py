@@ -10,14 +10,10 @@ from torchsde import sdeint
 from scipy.interpolate import CubicSpline
 
 import sys
-sys.path.append('Fit_E_P/')
-try:
-    NGRIP_data = np.genfromtxt('Data/NGRIP_d18O_all_clean.txt', delimiter='	', skip_header=70)
-    line_lohman = np.load(r'Data/NGRIP_lohman_E_P.npy')
 
-except:
-    NGRIP_data = np.genfromtxt('../Data/NGRIP_d18O_all_clean.txt', delimiter='	', skip_header=70)
-    line_lohman = np.load(r'../Data/NGRIP_lohman_E_P.npy')
+
+NGRIP_data = np.genfromtxt('Data/NGRIP_d18O_all_clean.txt', delimiter='	', skip_header=70)
+line_lohman = np.load(r'Data/NGRIP_lohman_E_P.npy')
 
 E_max = torch.max(torch.tensor(line_lohman[1][::-1][:84000][::20].copy()))
 E_proccessed = torch.tensor(line_lohman[1][::-1][:84000][::20].copy())/ E_max
