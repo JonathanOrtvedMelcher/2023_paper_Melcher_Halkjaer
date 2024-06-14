@@ -300,4 +300,4 @@ ax.legend(handles_final, labels_final, loc='upper center', ncol=2, fontsize = fo
 #ax.legend(handles, labels, loc='upper center', bbox_to_anchor=(0.5, -0.09), ncol=1, fontsize=20)
 
 
-plt.savefig('Figures/simple_simple_model_diagram.pdf', bbox_inches='tight')
+plt.savefig('Figures/f03.pdf', bbox_inches='tight')
