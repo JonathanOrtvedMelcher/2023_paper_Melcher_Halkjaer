@@ -140,4 +140,4 @@ ax[3].text(x,2, '(d)',
                 fontsize=fontsize)
 
 ax[3].set_xlabel('Time [ka b2k]')
-plt.savefig('Figures/f07_new.png', bbox_inches='tight', dpi = 300)
+plt.savefig('Figures/f07.png', bbox_inches='tight', dpi = 300)

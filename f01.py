@@ -91,9 +91,13 @@ ax[0].fill_between((do_events[-1]),-50, -35, color='grey',
 
 
 
-ax[1].plot(true_loh[0], true_loh[1], label = 'E(t)', color = colours[1])
-ax12.plot(true_loh[2], true_loh[3], 
+E_found = E_calc(is_stadial, 20_000)
+time_E = np.linspace(21700, 21700+len(E_found), len(E_found))
+
+ax[1].plot(time_E, E_found, label = 'E(t)', color = colours[1])
+ax12.plot(time_E, P_calc(is_stadial, 20_000), 
                     label = 'P(t)', color = colours[2])
+
 ax[1].set_ylabel('E(t) [events per 20 kyr]', fontsize=fontsize)
 ax12.set_ylabel('P(t) [fraction]', fontsize=fontsize)
 
@@ -112,4 +116,4 @@ ax[0].tick_params(axis='both', which='major', labelsize=fontsize)
 ax[1].tick_params(axis='both', which='major', labelsize=fontsize)
 ax12.tick_params(axis='both', which='major', labelsize=fontsize)
 # plt.show()
-plt.savefig('Figures/f01_test.pdf', bbox_inches='tight')
+plt.savefig('Figures/f01_new3.pdf', bbox_inches='tight')
