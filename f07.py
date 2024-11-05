@@ -1,6 +1,6 @@
 
 
-import Fit_E_P_scikit_62_params_last as fit
+import Fit_E_P_scikit_62_params as fit
 import torch
 from torch import nn
 import numpy as np
@@ -92,8 +92,8 @@ ax[0].plot(ts_plot,E_proccessed.detach().numpy()*12, label = 'E(t)', color = col
 ax[1].plot(ts_plot,P_sim[:,0],color = 'k', alpha = 0.5, label = 'P\'(t)')
 ax[1].plot(ts_plot,P_sim[:,1:],color = 'k', alpha = 0.5)
 ax[1].plot(ts_plot,P_proccessed.detach().numpy(), label = 'P(t)', color = color_palette[2])
-ax[0].set_ylabel('E [events per 20 kyr]', fontsize=fontsize)
-ax[1].set_ylabel('P', fontsize=fontsize)
+ax[0].set_ylabel('E(t) [events per 20 kyr]', fontsize=fontsize)
+ax[1].set_ylabel('P(t) [fraction]', fontsize=fontsize)
 ax[0].tick_params(axis='both', which='major', labelsize=fontsize)
 
 # make time series with 20 points evenly spaced points over the 5200 points
@@ -115,6 +115,9 @@ ax[3].set_xlabel('Time [yr BP]', fontsize=fontsize)
 # find the index with the best fit
 RMSE_to_find = np.sqrt(np.mean((E_sim[:,0]- E_proccessed.detach().numpy())**2 + (P_sim[:,0]- P_proccessed.detach().numpy())**2))
 min_rmse = np.argmin(RMSE_to_find)
+
+ax[0].plot(ts_plot,E_sim[:,min_rmse]*12, label = 'Best fit', color = color_palette[0])
+ax[1].plot(ts_plot,P_sim[:,min_rmse], label = 'Best fit', color = color_palette[0])
 
 ax[3].plot(ts*tc+11000, pred[:,0,min_rmse].detach().numpy(), label = 'Best fit', color = color_palette[0])
 ax[3].fill_between(ts[1:]*tc+11000, 0, (1-is_stadial[1:,min_rmse].detach().numpy()-0.2)*3, color = 'grey', alpha = 0.5, label = 'Interstadial')
@@ -149,5 +152,4 @@ ax[3].text(x,2, '(d)',
                 fontsize=fontsize)
 
 ax[3].set_xlabel('Time [ka b2k]')
-plt.savefig('Figures/Fit_alpha_20_gamma_20_sigma.png', bbox_inches='tight', dpi = 300)
-plt.show()
+plt.savefig('Figures/f07_new.png', bbox_inches='tight', dpi = 300)

@@ -48,7 +48,7 @@ color_bar_ax = None):
     scatter = ax.scatter(tot_pair_E_P_slope_post_mask[:,1], 
             tot_pair_E_P_slope_post_mask[:,0], 
             c = tot_pair_E_P_slope_post_mask[:,ind],
-             cmap = 'rainbow', zorder = 5, s = 50)
+            cmap = 'rainbow', zorder = 5, s = 50)
     # Add a colorbar
     if add_colorbar:
         if ind == 4:
@@ -64,20 +64,20 @@ color_bar_ax = None):
             print(ind)
             print(fig[0][0][0])
             colorbar = fig[0][0][0].colorbar(scatter, cax=color_bar_ax, 
-                                ticks = [0, 0.5, 1, 1.5, 2, 2.5, 3],
+                                ticks = [1, 1.5, 2, 2.5, 3],
                                 orientation = 'horizontal'
             )
 
-            scatter.set_clim(0,3)
+            scatter.set_clim(0.8,3.2)
 
             colorbar.set_label(r'$\gamma$')  # Replace with your desired label
     
     if add_true_values:
+        size_lohmann_10k = 10
+        color_lohmann_10k = 'k'
         ax.plot(P_proccessed, E_proccessed, color = 'k', 
         label = '(P(t),E(t)) Lohmann et al.', linestyle = '--', linewidth = 1,
         alpha = 1, zorder = 100)
-        color_lohmann_10k = 'k'
-        size_lohmann_10k = 10
         ax.plot(P_for_plot_lohmann, E_for_plot_lohmann, 'x', 
         markersize = size_lohmann_10k, color = color_lohmann_10k, 
         label = '(P(t),E(t)) Lohmann et al. 10k', zorder = 100, alpha = 1)
@@ -85,6 +85,7 @@ color_bar_ax = None):
 
         for i, E_P in enumerate(zip(E_for_plot_lohmann,P_for_plot_lohmann)):
             E_current, P_current = E_P
+            print(E_current, P_current)
             offset_right = 0
             offset_down = 0.2
             if i in [0,5]:
@@ -93,15 +94,18 @@ color_bar_ax = None):
                 offset_down = -0.5
 
             ax.annotate(f'{i*10 + 21}',
-            (E_current + offset_right, 
-            P_current  + offset_down), 
-            color = color_lohmann_10k, fontsize=fontsize, zorder = 100)
+            (P_current  + offset_right,
+            E_current + offset_down), 
+            color = color_lohmann_10k, fontsize=15, zorder = 100)
 
     return ax
 
 def make_sidebyside(fig,ii,ax, add_true_values = False, add_colorbar = False, cax = None):
     mask = tot_pair_E_P_slope[:,6] == np.unique(alpha_)[ii]
-
+    if np.unique(alpha_)[ii] == 0:
+        # for gamma > 1.85 and alpha = 0 the model is not stable 
+        mask2 = tot_pair_E_P_slope[:,-2] < 1.85
+        mask = mask & mask2
     # make the plots
     ax[0] = make_plot(fig,mask, 5, ax[0], add_true_values= add_true_values, 
                         add_colorbar = add_colorbar,
@@ -150,8 +154,8 @@ for i, alpha_index_ in enumerate(alpha_index_for_sidebyside):
 
 
 ax[0][1].legend(loc = 'upper right')
-ax[-1][0].set_xlabel(r"$\mu'_P$" , fontsize=fontsize)
-ax[-1][1].set_xlabel(r"$\mu'_P$" , fontsize=fontsize)
+ax[-1][0].set_xlabel(r"$\mu'_P$" + ' [fraction]' , fontsize=fontsize)
+ax[-1][1].set_xlabel(r"$\mu'_P$" + ' [fraction]', fontsize=fontsize)
 
 # increase the font size of the x and y labels and the ticks
 
@@ -175,5 +179,4 @@ ax[0][0].title.set_fontsize(fontsize)
 ax[0][1].title.set_text(r'Coloured with $\sigma$')
 ax[0][1].title.set_fontsize(fontsize)
 
-plt.savefig("Figures/Gif_now_as_panel.png", bbox_inches = 'tight', dpi = 300)
-plt.show()
+plt.savefig("Figures/f06.png", bbox_inches = 'tight', dpi = 300)

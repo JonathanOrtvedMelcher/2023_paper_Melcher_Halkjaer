@@ -40,6 +40,8 @@ for i, j in enumerate(is_stadial):
 
 do_events = np.array(do_events)[1:].reshape(-1,2)+11700
 
+precursor_list = [104377,84957,59297,58157,54897]
+precursor_names = ['23.2', '21.2', '17.2', '16.2', '15.1'][::-1]
 fontsize = 20
 fig,ax = plt.subplots(2,1, sharex=True, figsize=(20,10))
 
@@ -61,35 +63,57 @@ ax[1].set_xticklabels([121,111,101,91,81,71,61,51,41,31,21,11])
 ax[1].set_xlabel('Time [ka b2k]', fontsize=fontsize)
 
 ax[0].plot(d18O[:,0], d18O[:,1], label = 'NGRIP', color = colours[0])
-ax[0].set_ylabel(r'$\delta^{18}$O ‰', fontsize=fontsize)
+ax[0].set_ylabel(r'$\delta^{18}$O [‰]', fontsize=fontsize)
 
 ax[0].set_ylim(-48,-32)
+counter_for_precursor = 0
 for event in do_events[:-1]:
     # color the area between the event[0] and event[1] grey
-    ax[0].fill_between((event),-50, -30, color='grey', alpha=0.5)
-ax[0].fill_between((do_events[-1]),-50, -30, color='grey', 
-                            alpha=0.5, label = 'Interstadials')
+    if event[0] in precursor_list:
+        print(event, event[1]-event[0])
+        if counter_for_precursor == 0:
+            ax[0].fill_between((event),-50, -30, color='red', alpha=0.5, label = 'Precursor events', edgecolor = 'face')
+        else:
+            ax[0].fill_between((event),-50, -30, color='red', alpha=0.5, edgecolor = 'face')
+        
+        # add the precursor names
+        if counter_for_precursor >= 2:
+            print(event[0]+3300, precursor_names[counter_for_precursor])
+            ax[0].text(event[0]+3350, -33, precursor_names[counter_for_precursor], fontsize = 14, color = 'red')
+        else:
+            ax[0].text(event[0]-150, -33., precursor_names[counter_for_precursor], fontsize = 14, color = 'red')
+        counter_for_precursor += 1
+
+    else:
+        ax[0].fill_between((event),-50, -35, color='grey', alpha=0.5, edgecolor = 'face')
+ax[0].fill_between((do_events[-1]),-50, -35, color='grey', 
+                            alpha=0.5, label = 'Interstadials', edgecolor = 'face')
 
 
 
 E_found = E_calc(is_stadial, 20_000)
+print(E_found)
 time_E = np.linspace(21700, 21700+len(E_found), len(E_found))
 
 ax[1].plot(time_E, E_found, label = 'E(t)', color = colours[1])
 ax12.plot(time_E, P_calc(is_stadial, 20_000), 
                     label = 'P(t)', color = colours[2])
 ax[1].set_ylabel('E(t) [events per 20 kyr]', fontsize=fontsize)
-ax12.set_ylabel('P(t)', fontsize=fontsize)
+ax12.set_ylabel('P(t) [fraction]', fontsize=fontsize)
 
 # make a combined legend for both plots
 lines, labels = ax[0].get_legend_handles_labels()
 lines2, labels2 = ax[1].get_legend_handles_labels()
 lines3, labels3 = ax12.get_legend_handles_labels()
 plt.legend(lines + lines2 + lines3, labels + labels2 + labels3, 
-                            loc=[0.02,0.75], fontsize=fontsize)
+                            loc=[0.02,0.4], fontsize=fontsize)
 
 ax[0].text(10500,-33, '(a)', fontsize = fontsize)
 ax[1].text(10500, 12, '(b)', fontsize = fontsize)
 
-
-plt.savefig('Figures/NGRIP_lohman_out_graph.pdf', bbox_inches='tight')
+# increase the fontsize of the ticks
+ax[0].tick_params(axis='both', which='major', labelsize=fontsize)
+ax[1].tick_params(axis='both', which='major', labelsize=fontsize)
+ax12.tick_params(axis='both', which='major', labelsize=fontsize)
+# plt.show()
+plt.savefig('Figures/f01.pdf', bbox_inches='tight')
