@@ -162,3 +162,4 @@ cython_debug/
 
 # Ignore the Data folder
 Data/
+Figures/f01_test.pdf
